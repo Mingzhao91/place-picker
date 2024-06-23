@@ -30,6 +30,7 @@ export default function renderLocation(location, isAvailableLocation = true) {
   }" />
         <h3>${location.title}</h3>
       </button>
+      <a href="/places/${location.id}">Details</a>
     </li>
   `;
 }
