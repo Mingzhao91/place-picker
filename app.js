@@ -77,6 +77,31 @@ app.post("/places", (req, res) => {
   `);
 });
 
+app.get("/places/:id", (req, res) => {
+  const placeId = req.params.id;
+  console.log(placeId);
+  const location = AVAILABLE_LOCATIONS.find(
+    (location) => location.id === placeId
+  );
+
+  res.send(`
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>Interesting Locations</title>
+        <link rel="stylesheet" href="/main.css" />
+        <link rel="icon" href="/logo.png" />
+        <script src="/htmx.js" defer></script>
+        <script src="/main.js" defer></script>
+      </head>
+      <body hx-boost="true">
+        <p>${location.title}</p>
+      </body>
+    </html>
+    
+  `);
+});
+
 app.delete("/places/:id", (req, res) => {
   const locationId = req.params.id;
   const locationIndex = INTERESTING_LOCATIONS.findIndex(
