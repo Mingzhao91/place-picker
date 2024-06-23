@@ -9,15 +9,16 @@ export default function renderLocation(location, isAvailableLocation = true) {
       hx-vals='{"locationId": "${location.id}"}'
       hx-target="#interesting-locations"
       hx-swap="beforeend show:#int-locations-section:top"
+      data-action="add"
     `;
   } else {
     // remove location from the ul#interesting-locations
     // add location to #available-locations
     attributes = `
       hx-delete="/places/:${location.id}"
-      hx-confirm="Are you sure?"
       hx-target="closest li"
       hx-swap="outerHTML"
+      data-action=remove"
     `;
   }
 
