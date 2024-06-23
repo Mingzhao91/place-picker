@@ -1,6 +1,9 @@
-import renderLocation from './components/location.js';
+import renderLocation from "./components/location.js";
 
-export default function renderLocationsPage(availableLocations, interestingLocations) {
+export default function renderLocationsPage(
+  availableLocations,
+  interestingLocations
+) {
   return `
     <!DOCTYPE html>
     <html>
@@ -20,17 +23,21 @@ export default function renderLocationsPage(availableLocations, interestingLocat
           </p>
         </header>
         <main>
-          <section class="locations-category">
+          <section id="int-locations-section" class="locations-category">
             <h2>My Dream Locations</h2>
             <ul id="interesting-locations" class="locations">
-              ${interestingLocations.map((location) => renderLocation(location, false)).join('')}
+              ${interestingLocations
+                .map((location) => renderLocation(location, false))
+                .join("")}
             </ul>
           </section>
 
           <section class="locations-category">
             <h2>Available Locations</h2>
             <ul id="available-locations" class="locations">
-              ${availableLocations.map((location) => renderLocation(location)).join('')}
+              ${availableLocations
+                .map((location) => renderLocation(location))
+                .join("")}
             </ul>
           </section>
         </main>

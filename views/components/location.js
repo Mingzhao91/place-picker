@@ -8,7 +8,7 @@ export default function renderLocation(location, isAvailableLocation = true) {
       hx-post="/places"
       hx-vals='{"locationId": "${location.id}"}'
       hx-target="#interesting-locations"
-      hx-swap="beforeend"
+      hx-swap="beforeend show:#int-locations-section:top"
     `;
   } else {
     // remove location from the ul#interesting-locations
