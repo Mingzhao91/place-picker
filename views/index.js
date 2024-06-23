@@ -27,7 +27,11 @@ export default function renderLocationsPage(
         <main>
           <section id="suggested-locations-section">
             <h2>Currently Suggested</h2>
-            <ul id="suggested-location" class="locations">
+            <ul 
+              id="suggested-location" 
+              class="locations"
+              hx-get="/suggested-locations"
+              hx-trigger="every 5s">
               ${suggestdLocations
                 .map((location) => renderLocation(location))
                 .join("")}

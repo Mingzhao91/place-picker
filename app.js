@@ -44,6 +44,14 @@ app.get("/", (req, res) => {
   );
 });
 
+app.get("/suggested-locations", (req, res) => {
+  const suggestdLocations = getSuggestedLocations();
+
+  res.send(
+    suggestdLocations.map((location) => renderLocation(location)).join("")
+  );
+});
+
 app.post("/places", (req, res) => {
   const locationId = req.body.locationId;
   const location = AVAILABLE_LOCATIONS.find((loc) => loc.id === locationId);
@@ -59,7 +67,7 @@ app.post("/places", (req, res) => {
   res.send(`
     ${renderLocation(location, false)}
 
-    <ul id="suggested-location" class="locations" hx-swap-oob="true">
+    <ul id="suggested-location" class="locations" hx-swap-oob="innerHTML">
       ${suggestdLocations.map((location) => renderLocation(location)).join("")}
     </ul>
 
