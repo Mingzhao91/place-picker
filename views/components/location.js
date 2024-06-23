@@ -18,7 +18,7 @@ export default function renderLocation(location, isAvailableLocation = true) {
       hx-delete="/places/:${location.id}"
       hx-target="closest li"
       hx-swap="outerHTML"
-      data-action=remove"
+      data-action="remove"
     `;
   }
 

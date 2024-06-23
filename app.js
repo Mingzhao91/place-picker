@@ -4,6 +4,25 @@ import { AVAILABLE_LOCATIONS } from "./data/available-locations.js";
 import renderLocationsPage from "./views/index.js";
 import renderLocation from "./views/components/location.js";
 
+function getSuggestedLocations() {
+  const availableLocations = AVAILABLE_LOCATIONS.filter(
+    (location) => !INTERESTING_LOCATIONS.includes(location)
+  );
+
+  if (availableLocations.length < 2) return availableLocations;
+
+  const suggestedLocation1 = availableLocations.splice(
+    Math.floor(Math.random() * availableLocations.length),
+    1
+  )[0];
+  const suggestedLocation2 = availableLocations.splice(
+    Math.floor(Math.random() * availableLocations.length),
+    1
+  )[0];
+
+  return [suggestedLocation1, suggestedLocation2];
+}
+
 const app = express();
 
 const INTERESTING_LOCATIONS = [];
@@ -15,7 +34,14 @@ app.get("/", (req, res) => {
   const availableLocations = AVAILABLE_LOCATIONS.filter(
     (location) => !INTERESTING_LOCATIONS.includes(location)
   );
-  res.send(renderLocationsPage(availableLocations, INTERESTING_LOCATIONS));
+  const suggestdLocations = getSuggestedLocations();
+  res.send(
+    renderLocationsPage(
+      suggestdLocations,
+      availableLocations,
+      INTERESTING_LOCATIONS
+    )
+  );
 });
 
 app.post("/places", (req, res) => {
@@ -27,9 +53,15 @@ app.post("/places", (req, res) => {
     (location) => !INTERESTING_LOCATIONS.includes(location)
   );
 
-  // apply out of band swap to update the available locations
+  const suggestdLocations = getSuggestedLocations();
+
+  // apply out of band swap to update the available locations and suggested locations
   res.send(`
     ${renderLocation(location, false)}
+
+    <ul id="suggested-location" class="locations" hx-swap-oob="true">
+      ${suggestdLocations.map((location) => renderLocation(location)).join("")}
+    </ul>
 
     <ul id="available-locations" class="locations" hx-swap-oob="true">
       ${availableLocations.map((location) => renderLocation(location)).join("")}
