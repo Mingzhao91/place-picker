@@ -20,11 +20,10 @@ app.get("/", (req, res) => {
 
 app.post("/places", (req, res) => {
   const locationId = req.body.locationId;
-  console.log("locationId: ", locationId);
   const location = AVAILABLE_LOCATIONS.find((loc) => loc.id === locationId);
   INTERESTING_LOCATIONS.push(location);
 
-  res.send(renderLocation(location));
+  res.send(renderLocation(location, false));
 });
 
 app.delete("/places/:id", (req, res) => {

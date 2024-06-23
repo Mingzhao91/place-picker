@@ -1,12 +1,29 @@
-export default function renderLocation(location) {
+export default function renderLocation(location, isAvailableLocation = true) {
+  let attributes;
+
+  if (isAvailableLocation) {
+    // remove location from the ul#available-locations
+    // add location to #interesting-locations
+    attributes = `
+      hx-post="/places"
+      hx-vals='{"locationId": "${location.id}"}'
+      hx-target="#interesting-locations"
+      hx-swap="beforeend"
+    `;
+  } else {
+    // remove location from the ul#interesting-locations
+    // add location to #available-locations
+    attributes = `
+      hx-delete="/places/:${location.id}"
+      hx-confirm="Are you sure?"
+      hx-target="closest li"
+      hx-swap="outerHTML"
+    `;
+  }
+
   return `
     <li class="location-item">
-      <button
-        hx-post="/places"
-        hx-vals='{"locationId": "${location.id}"}'
-        hx-target="#interesting-locations"
-        hx-swap="beforeend"
-      >
+      <button ${attributes}>
         <img src="${`/images/${location.image.src}`}" alt="${
     location.image.alt
   }" />
