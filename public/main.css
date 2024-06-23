@@ -250,6 +250,34 @@ header p {
   max-width: 20rem;
 }
 
+#place-detail {
+  max-width: 70rem;
+  margin: 2rem auto;
+  padding: 2rem;
+  border-radius: 8px;
+  background: linear-gradient(#0f0e0d, #22211e);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+}
+
+#place-detail header {
+  display: flex;
+  gap: 3rem;
+}
+
+#place-detail img {
+  width: 17.5rem;
+  border-radius: 8px;
+}
+
+#place-detail h1 {
+  font-size: 2rem;
+}
+
+#place-detail-description {
+  margin: 3rem auto;
+  font-size: 1.5rem;
+}
+
 @keyframes slide-down-fade-in {
   from {
     opacity: 0;

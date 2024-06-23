@@ -79,7 +79,6 @@ app.post("/places", (req, res) => {
 
 app.get("/places/:id", (req, res) => {
   const placeId = req.params.id;
-  console.log(placeId);
   const location = AVAILABLE_LOCATIONS.find(
     (location) => location.id === placeId
   );
@@ -95,7 +94,23 @@ app.get("/places/:id", (req, res) => {
         <script src="/main.js" defer></script>
       </head>
       <body hx-boost="true">
-        <p>${location.title}</p>
+        <header>
+          <img src="/logo.png" alt="Stylized globe" />
+          <h1>PlacePicker</h1>
+          <p>
+            Create your personal collection of places you would like to visit or
+            you have visited.
+          </p>
+        </header>
+        <main id="place-detail">
+          <header>
+            <img src="/images/${location.image.src}" alt="${location.image.alt}">
+            <div>
+              <h1>${location.title}</h1>
+            </div>
+          </header>
+          <p id="place-detail-description">${location.description}</p>
+        </main>
       </body>
     </html>
     
