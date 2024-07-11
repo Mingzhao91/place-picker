@@ -17,6 +17,10 @@ export default function renderLocationsPage(
       </head>
       <body>
         <header>
+          <div class="login-container">
+            <a class="login-link" href="/login-page">Login</a>
+          </div>
+
           <img src="/logo.png" alt="Stylized globe" />
           <h1>PlacePicker</h1>
           <p>

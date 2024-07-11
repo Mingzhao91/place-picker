@@ -3,6 +3,8 @@ import express from "express";
 import { AVAILABLE_LOCATIONS } from "./data/available-locations.js";
 import renderLocationsPage from "./views/index.js";
 import renderLocation from "./views/components/location.js";
+import loginPage from "./views/components/login-page.js";
+import locationDetail from "./views/components/location-detail.js";
 
 function getSuggestedLocations() {
   const availableLocations = AVAILABLE_LOCATIONS.filter(
@@ -77,44 +79,68 @@ app.post("/places", (req, res) => {
   `);
 });
 
+app.get("/login-page", (req, res) => {
+  res.send(loginPage());
+});
+
+app.post("/validate", (req, res) => {
+  if ("email" in req.body && !req.body.email.includes("@")) {
+    return res.send(`
+      E-Mail address is invalid.
+    `);
+  } else if ("email" in req.body && req.body.email.includes("@")) {
+    return res.send();
+  } else if ("password" in req.body && req.body.password.trim().length < 8) {
+    return res.send(`
+      Password must be at least 8 characters long.
+    `);
+  } else if ("password" in req.body && req.body.password.trim().length >= 8) {
+    return res.send();
+  }
+  res.send();
+});
+
+app.post("/login", (req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
+
+  let errors = {};
+
+  if (!email || !email.includes("@")) {
+    errors.email = "Please enter a valid email address.";
+  }
+
+  if (!password || password.trim().length < 8) {
+    errors.password = "Password must be at least 8 characters long.";
+  }
+
+  if (Object.keys(errors).length > 0) {
+    return res.status(422).send(`
+        <ul id="form-errors">
+          ${Object.keys(errors)
+            .map((key) => `<li>${errors[key]}</li>`)
+            .join("")}
+        </ul>
+    `);
+  }
+
+  if (Math.random() > 0.5) {
+    return res.status(500).send(`
+      <p class="error">A server-side error occurred. Please try again.</p>
+    `);
+  }
+
+  res.setHeader("HX-Redirect", "/");
+  res.send();
+});
+
 app.get("/places/:id", (req, res) => {
   const placeId = req.params.id;
   const location = AVAILABLE_LOCATIONS.find(
     (location) => location.id === placeId
   );
 
-  res.send(`
-    <!DOCTYPE html>
-    <html>
-      <head>
-        <title>Interesting Locations</title>
-        <link rel="stylesheet" href="/main.css" />
-        <link rel="icon" href="/logo.png" />
-        <script src="/htmx.js" defer></script>
-        <script src="/main.js" defer></script>
-      </head>
-      <body hx-boost="true">
-        <header>
-          <img src="/logo.png" alt="Stylized globe" />
-          <h1>PlacePicker</h1>
-          <p>
-            Create your personal collection of places you would like to visit or
-            you have visited.
-          </p>
-        </header>
-        <main id="place-detail">
-          <header>
-            <img src="/images/${location.image.src}" alt="${location.image.alt}">
-            <div>
-              <h1>${location.title}</h1>
-            </div>
-          </header>
-          <p id="place-detail-description">${location.description}</p>
-        </main>
-      </body>
-    </html>
-    
-  `);
+  res.send(locationDetail(location));
 });
 
 app.delete("/places/:id", (req, res) => {
